@@ -22,3 +22,6 @@ and make competitive job offers.
 
 ## Files
 - `analysis.sql` — all SQL queries used in this project
+
+## Visualization
+🔗 [View Interactive Dashboard on Tableau Public](https://public.tableau.com/app/profile/altynay.yerzhigitova/viz/SalaryAnalysisbyJobTitleandEducationLevel/SalaryAnalysisDashboard?publish=yes)

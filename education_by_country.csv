@@ -1,0 +1,21 @@
+country,education_level,avg_salary,num_employees
+Australia,PhD,167993,276
+Australia,Master's Degree,129599,357
+Australia,Bachelor's Degree,95094,600
+Australia,High School,37284,103
+Canada,PhD,167704,265
+Canada,Master's Degree,133124,385
+Canada,Bachelor's Degree,94959,585
+Canada,High School,37181,92
+China,PhD,165081,278
+China,Master's Degree,129873,361
+China,Bachelor's Degree,96772,624
+China,High School,37374,80
+UK,PhD,163954,296
+UK,Master's Degree,128575,375
+UK,Bachelor's Degree,94819,577
+UK,High School,38372,87
+USA,PhD,163568,254
+USA,Master's Degree,129301,383
+USA,Bachelor's Degree,93769,637
+USA,High School,33203,86
