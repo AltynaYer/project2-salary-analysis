@@ -1,33 +1,48 @@
-# Global Salary Analysis by Job Title & Country
+# Global Salary Analysis | SQL, Data Quality & BI Modelling
 
-**Tools:** PostgreSQL, Tableau  
-**Dataset:** [Salary by Job Title and Country — Kaggle](https://www.kaggle.com/datasets/amirmahdiabbootalebi/salary-by-job-title-and-country)
+**Portfolio status:** PostgreSQL analysis and reproducible modelling scripts supplied. Existing Tableau dashboard published. Power BI model guide supplied; **Power BI report not yet built or validated**.
 
-## Business Problem
-HR teams need to understand what drives salary differences across countries,
-job titles, and education levels — to benchmark compensation and make
-competitive offers. This analysis covers 6,700+ salary records across
-USA, UK, Australia, Canada, and China.
+## Business question
+How do observed salaries vary across job titles, countries, education and experience in this dataset? This exploratory case demonstrates a reporting workflow; the data should **not** be treated as representative salary-market benchmarks.
 
-## What I Did
-- Loaded 6,704 salary records into PostgreSQL and cleaned dirty data:
-  merged duplicate education labels (Bachelor's / Bachelor's Degree),
-  fixed capitalisation inconsistencies, removed 3 NULL rows
-- Identified top paying jobs per country using GROUP BY + AVG + HAVING
-- Analysed how education level affects average salary
-- Built an interactive Tableau dashboard with country filter —
-  allows switching between all 5 countries in real time
+**Source:** [Salary by Job Title and Country — Kaggle](https://www.kaggle.com/datasets/amirmahdiabbootalebi/salary-by-job-title-and-country)  
+**Source snapshot:** 6,704 records; 6 records lack at least one required analytical field, leaving 6,698 under the documented cleaning rules.  
+**Tools:** PostgreSQL, SQL, Tableau; Power BI modelling guide and DAX measures.
 
-## Key Findings
-- Director of Data Science is the highest paying role in UK ($205K avg)
-- PhD holders earn ~4× more than High School graduates on average
-- Data Analyst average salary in UK: $122K
-- Salary gap between countries is significant — USA leads overall
+## What the project demonstrates
+- Documented import and repeatable data cleaning
+- Education-label standardisation, null and invalid-value checks, row-count reconciliation
+- Fact/dimension model: salary observations with country, job and education dimensions
+- Grouped salary summaries with sample sizes, minimum sample threshold for UK job ranking, and experience bands
+- Tableau visual exploration and a planned Power BI report with explicit DAX measures
 
-## Visualization
-🔗 [View Interactive Dashboard on Tableau Public](https://public.tableau.com/app/profile/altynay.yerzhigitova/viz/SalaryAnalysisbyJobTitleandEducationLevel/SalaryAnalysisDashboard?publish=yes)
+## Run locally
+Requires PostgreSQL and `psql`. Create a database named `salary_portfolio`, then run these **from the repository root**:
 
-## Files
-- `analysis.sql` — all SQL queries used in this project
-- `Salary_Data_Based_country_and_race.csv` — raw dataset
-- `education_by_country.csv` — aggregated education analysis
+```bash
+createdb salary_portfolio
+psql -d salary_portfolio -v ON_ERROR_STOP=1 -f sql/01_setup.sql
+psql -d salary_portfolio -v ON_ERROR_STOP=1 -f sql/02_clean_and_model.sql
+psql -d salary_portfolio -v ON_ERROR_STOP=1 -f sql/04_quality_checks.sql
+psql -d salary_portfolio -v ON_ERROR_STOP=1 -f sql/03_analysis.sql
+```
+
+The first script resets the `salary_portfolio` schema; use a dedicated database, **not a database containing other work**. Import uses a relative path to the committed CSV. Re-running setup and modelling resets the project tables.
+
+## Visualisations
+- [Existing Tableau Public dashboard](https://public.tableau.com/app/profile/altynay.yerzhigitova/viz/SalaryAnalysisbyJobTitleandEducationLevel/SalaryAnalysisDashboard?publish=yes)
+- [Power BI model, DAX and report-building instructions](powerbi/README.md) — report construction and validation pending
+
+## Project files
+- [Raw CSV](Salary_Data_Based_country_and_race.csv)
+- [Import](sql/01_setup.sql), [cleaning and dimensional model](sql/02_clean_and_model.sql)
+- [Analytical queries](sql/03_analysis.sql), [quality checks](sql/04_quality_checks.sql)
+- [Data dictionary and limitations](docs/data_dictionary.md)
+- [Original analysis queries](analysis.sql) — historical first iteration; use `sql/03_analysis.sql` for the updated model
+- [Education summary](education_by_country.csv) — historical output; rebuild and verify against cleaned data before reporting
+
+## Interpretation
+Averages here describe observations in the supplied dataset. Collection method, currency comparability, dates and country-level representativeness have not been independently validated. Differences across education levels or countries are **associations, not causal estimates**.
+
+## Verification status
+CSV row counts and required-field missingness were independently inspected. PostgreSQL scripts and Power BI measures still need execution in their respective applications; do not claim a fully tested dashboard until these checks pass.
