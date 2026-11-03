@@ -26,23 +26,29 @@ FROM v_salary_analysis
 WHERE gender IS NOT NULL
 GROUP BY country, gender ORDER BY country, avg_salary DESC;
 
-SELECT CASE
-         WHEN years_experience IS NULL THEN 'Unknown'
-         WHEN years_experience < 3 THEN '0-2 years'
-         WHEN years_experience < 6 THEN '3-5 years'
-         WHEN years_experience < 11 THEN '6-10 years'
-         ELSE '11+ years'
-       END AS experience_bucket,
-       COUNT(*) AS sample_size, ROUND(AVG(salary), 0) AS avg_salary
-FROM v_salary_analysis
-GROUP BY 1
-ORDER BY CASE
-  WHEN CASE WHEN years_experience IS NULL THEN 'Unknown'
-            WHEN years_experience < 3 THEN '0-2 years'
-            WHEN years_experience < 6 THEN '3-5 years'
-            WHEN years_experience < 11 THEN '6-10 years'
-            ELSE '11+ years' END = '0-2 years' THEN 1
-  ELSE 2 END, experience_bucket;
+WITH experience_groups AS (
+  SELECT CASE
+    WHEN years_experience IS NULL THEN 'Unknown'
+    WHEN years_experience < 3 THEN '0-2 years'
+    WHEN years_experience < 6 THEN '3-5 years'
+    WHEN years_experience < 11 THEN '6-10 years'
+    ELSE '11+ years'
+  END AS experience_bucket,
+  CASE
+    WHEN years_experience IS NULL THEN 5
+    WHEN years_experience < 3 THEN 1
+    WHEN years_experience < 6 THEN 2
+    WHEN years_experience < 11 THEN 3
+    ELSE 4
+  END AS sort_order,
+  salary
+  FROM v_salary_analysis
+)
+SELECT experience_bucket, COUNT(*) AS sample_size,
+       ROUND(AVG(salary), 0) AS avg_salary
+FROM experience_groups
+GROUP BY experience_bucket, sort_order
+ORDER BY sort_order;
 
 -- Country-specific Data Analyst averages should be labelled sample estimates.
 SELECT country, COUNT(*) AS sample_size, ROUND(AVG(salary), 0) AS avg_salary
