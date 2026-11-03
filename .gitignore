@@ -1,0 +1,10 @@
+# Local exports and application-specific files
+.DS_Store
+__pycache__/
+*.pyc
+*.log
+.env
+.env.*
+!.env.example
+powerbi/*.pbix
+powerbi/*.pbit
